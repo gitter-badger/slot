@@ -49,17 +49,18 @@ class Wheel(object):
             self.wheel_item.append(root.canvas.create_image(self.x, self.y, image = wheel_images[i]))
 
     def wheel_time(self):
-        print("made it")
+        print("made it and from  %s" % (self))
         root.canvas.after(10, self.wheel_count)
 
     def wheel_count(self):
         root.canvas.lower(self.wheel_item[self.count])
+        print("this far")
         if self.count == 7:
             self.count = 0
         else:
             self.count += 1
         root.canvas.update()
-        return self.wheel_time()
+        self.wheel_time()
 
 
 
@@ -69,7 +70,15 @@ class Wheel(object):
 root = Window()
 
 wheel_images = GetImages()
-wheel_1 = Wheel(400, 300)
+
+wheel_1 = Wheel(200, 300)
 wheel_1.wheel_time()
+
+wheel_2 = Wheel(400, 300)
+wheel_2.wheel_time()
+
+wheel_3 = Wheel(600, 300)
+wheel_3.wheel_time()
+
 
 root.mainloop()
