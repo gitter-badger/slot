@@ -16,25 +16,11 @@ class Window(Tk):
         self.mainframe.columnconfigure(0, weight=1)
         self.mainframe.pack(expand=True)
 
-        self.canvas = TheCanvas(self.mainframe)
-
-        self.wheel_images = GetImages()
-        self.wheel_1 = Wheel(self.canvas, self.wheel_images, 400, 300)
-
-
-class TheCanvas(Canvas):
-
-    def __init__(self, mainframe):
-        Canvas.__init__(self, mainframe)
-        self.mainframe = mainframe
         self.canvas = Canvas(self.mainframe, width=800, height=600, bg= 'black')
         self.canvas.pack()
 
-# *******************************************************************
-
 
 class GetImages(object):
-
     def __init__(self):
 
         self.wheel_images = []
@@ -52,31 +38,28 @@ class GetImages(object):
 
 class Wheel(object):
 
-    def __init__(self, canvas, wheel_images, x, y):
+    def __init__(self, x, y):
+
         self.x = x
         self.y = y
+
         self.wheel_item = []
         self.count = 0
-        self.wheel_images = wheel_images
-        self.canvas = canvas
-        for i in range(8):
-            self.wheel_item.append(self.canvas.create_image(self.x, self.y, image=self.wheel_images[i]))
-
-    def __getitem__(self, index):
-        return self.wheel_item[index]
+        for i in range(9):
+            self.wheel_item.append(root.canvas.create_image(self.x, self.y, image = wheel_images[i]))
 
     def wheel_time(self):
-        self.canvas.after(10, self.wheel_count)
+        print("made it")
+        root.canvas.after(10, self.wheel_count)
 
     def wheel_count(self):
-
-        self.canvas.lower(self.wheel_item[self.count])
+        root.canvas.lower(self.wheel_item[self.count])
         if self.count == 7:
             self.count = 0
         else:
             self.count += 1
-        self.canvas.update()
-        self.wheel_time()
+        root.canvas.update()
+        return self.wheel_time()
 
 
 
@@ -84,4 +67,9 @@ class Wheel(object):
 
 
 root = Window()
+
+wheel_images = GetImages()
+wheel_1 = Wheel(400, 300)
+wheel_1.wheel_time()
+
 root.mainloop()
