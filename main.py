@@ -37,10 +37,7 @@ class GetImages(object):
 
 
 class Wheel(object):
-
-
-    def __init__(self, x, y, flip_speed=10, toggle= False):
-
+    def __init__(self, x, y, flip_speed=10, toggle=False):
         self.x = x
         self.y = y
         self.flip_speed = flip_speed
@@ -49,7 +46,7 @@ class Wheel(object):
         self.wheel_item = []
         self.count = 0
         for i in range(9):
-            self.wheel_item.append(root.canvas.create_image(self.x, self.y, image = wheel_images[i]))
+            self.wheel_item.append(root.canvas.create_image(self.x, self.y, image=wheel_images[i]))
         self.wheel_time()
 
     def wheel_time(self):
@@ -66,29 +63,29 @@ class Wheel(object):
             root.canvas.update()
             self.wheel_time()
 
+    def negate_motion(self):
+        if self.toggle:
+            self.toggle = False
+        else:
+            self.toggle = True
+            self.wheel_time()
+            self.flip_speed = randrange(19, 34)
 
-def stop_all(): #todo Temporary function
-    if wheel_1.toggle and wheel_2.toggle and wheel_3.toggle:
-        wheel_1.toggle, wheel_2.toggle, wheel_3.toggle = False, False, False
-    elif not wheel_1.toggle and not wheel_2.toggle and not wheel_3.toggle:
-        wheel_1.toggle = True
-        wheel_2.toggle = True
-        wheel_3.toggle = True
 
-        wheel_1.wheel_time()
-        wheel_2.wheel_time()
-        wheel_3.wheel_time()
+#todo Temporary function
+def stop_all():
+    wheels_are_stopped = False
 
-        stop_milli = randrange(3001,5002)
+    # First loop to check if at least one is spinning, if so stop it
+    for wheel in wheels:
+        if wheel.toggle:
+            wheel.negate_motion()
+            wheels_are_stopped = True
 
-        wheel_1.flip_speed = randrange(19, 34)
-        wheel_2.flip_speed = randrange(19, 34)
-        wheel_3.flip_speed = randrange(19, 34)
-
-        print(wheel_1.flip_speed, wheel_2.flip_speed, wheel_3.flip_speed)
-        print(stop_milli)
-
-        root.canvas.after(stop_milli, stop_all) #todo instead of stop all, make a stop definition for each wheel
+    # If wheels were already all stopped, start them all
+    if not wheels_are_stopped:
+        for wheel in wheels:
+            wheel.negate_motion()
 
 # *********************************************************************
 
@@ -97,14 +94,18 @@ root = Window()
 
 wheel_images = GetImages()
 
-wheel_1 = Wheel(200, 300, 200)
-
-wheel_2 = Wheel(400, 300, 300)
-
-wheel_3 = Wheel(600, 300, 100)
+# Reorganized the wheels into a list to make iteration easier, but
+# can be changed if it's not handy enough
+wheels = [Wheel(200, 300, 200), Wheel(400, 300, 300), Wheel(600, 300, 100)]
 
 #todo root.canvas create_window, then put an image inside, tag image and use http://effbot.org/zone/tkinter-canvas-find-withtag.htm
-button = Button(root.mainframe, text="Start/Stop", command = stop_all)
-button.pack()
+stop_all_button = Button(root.mainframe, text="Start/Stop", command = stop_all)
+stop_wheel_1 = Button(root.mainframe, text="Wheel 1", command=wheels[0].negate_motion)
+stop_wheel_2 = Button(root.mainframe, text="Wheel 2", command=wheels[1].negate_motion)
+stop_wheel_3 = Button(root.mainframe, text="Wheel 3", command=wheels[2].negate_motion)
+stop_all_button.pack(side=LEFT)
+stop_wheel_1.pack(side=LEFT)
+stop_wheel_2.pack(side=LEFT)
+stop_wheel_3.pack(side=LEFT) # these can be centred later
 
 root.mainloop()
