@@ -9,7 +9,7 @@ class Window(Tk):
         self.title("Fruit Machine")
 
         self.title("Fruit Machine")
-        self.geometry('800x650')#todo make this 800x600, it's current state is before displaying temporary button
+        self.geometry('800x600')
 
         self.mainframe = ttk.Frame(self)
         self.mainframe.rowconfigure(0, weight=1)
@@ -103,9 +103,11 @@ stop_all_button = Button(root.mainframe, text="Start/Stop", command = stop_all)
 stop_wheel_1 = Button(root.mainframe, text="Wheel 1", command=wheels[0].negate_motion)
 stop_wheel_2 = Button(root.mainframe, text="Wheel 2", command=wheels[1].negate_motion)
 stop_wheel_3 = Button(root.mainframe, text="Wheel 3", command=wheels[2].negate_motion)
-stop_all_button.pack(side=LEFT)
-stop_wheel_1.pack(side=LEFT)
-stop_wheel_2.pack(side=LEFT)
-stop_wheel_3.pack(side=LEFT) # these can be centred later
+stop_all_window = root.canvas.create_window(400, 500,window=stop_all_button)
+stop_wheel_l_window = root.canvas.create_window(200, 425,window=stop_wheel_1)
+stop_wheel_2_window = root.canvas.create_window(400, 425,window=stop_wheel_2)
+stop_wheel_3_window = root.canvas.create_window(600, 425,window=stop_wheel_3)
+
+
 
 root.mainloop()
